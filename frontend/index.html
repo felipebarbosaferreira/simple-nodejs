@@ -1,0 +1,150 @@
+<!doctype html>
+<html ng-app="todoApp">
+
+<head>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  
+  <!-- Required meta tags for bootstrap 4 -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- AngularJS -->
+  <script src="angular.min.js"></script>
+  <script src="todo.js"></script>
+
+  <!-- Bootstrap 4 -->
+  <link rel="stylesheet" type="text/css" href="bootstrap4.min.css"/>
+  <script src="jquery-3.2.1.slim.min.js"></script>
+  <script src="popper.min.js"></script>
+  <script src="bootstrap4.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="custom.css"/>
+</head>
+
+<body ng-controller="TodoListController as self" class="container">
+  <div class="row" ng-init="self.getAllTodo()">
+    <div class="col-md-12">
+      <h2>Minhas Tarefas</h2>
+    </div>
+  </div>
+
+  <!-- Button trigger modal -->
+  <div class="row">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalNovaTarefa" ng-click="self.task = {}">
+        + tarefa
+      </button>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-4 bg-prata">
+      <h4 class="text-center">Para fazer</h4>
+      <div class="mt-3" ng-repeat="task in self.todos" ng-if="!task.prioritaria && !task.terminada">
+        <div class="card text-white bg-primary mb-3 mx-auto" style="max-width: 18rem;">
+          <div class="card-header" ng-bind="task.responsavel"></div>
+          <div class="card-body">
+            <h5 class="card-title" ng-bind="task.nome"></h5>
+            <p class="card-text" ng-bind="task.descricao"></p>
+          </div>
+          <div class="mx-auto h-25">
+            <small class="text-bold-hover" ng-click="self.concluirTarefa(task)">Concluir</small>
+            | 
+           <small class="text-bold-hover" ng-click="self.priorizarTarefa(task)">Priorizar</small>
+            | 
+            <small class="text-bold-hover" ng-click="self.excluirTarefa(task)">Excluir</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 bg-amarelo">
+      <h4 class="text-center">Prioritária</h4>
+      <div class="mt-3" ng-repeat="task in self.todos" ng-if="task.prioritaria && !task.terminada">
+        <div class="card text-white bg-primary mb-3 mx-auto" style="max-width: 18rem;">
+          <div class="card-header" ng-bind="task.responsavel"></div>
+          <div class="card-body">
+            <h5 class="card-title" ng-bind="task.nome"></h5>
+            <p class="card-text" ng-bind="task.descricao"></p>
+          </div>
+          <div class="mx-auto h-25">
+            <small class="text-bold-hover" ng-click="self.concluirTarefa(task)">Concluir</small>
+             | 
+            <small class="text-bold-hover" ng-click="self.despriorizarTarefa(task)">Despriorizar</small>
+             | 
+            <small class="text-bold-hover" ng-click="self.excluirTarefa(task)">Excluir</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 bg-verde">
+      <h4 class="text-center">Concluída</h4>
+      <div class="mt-3" ng-repeat="task in self.todos" ng-if="task.terminada">
+        <div class="card text-white bg-primary mb-3 mx-auto" style="max-width: 18rem;">
+          <div class="card-header" ng-bind="task.responsavel"></div>
+          <div class="card-body">
+            <h5 class="card-title" ng-bind="task.nome"></h5>
+            <p class="card-text" ng-bind="task.descricao"></p>
+          </div>
+          <div class="mx-auto h-25">
+            <small class="text-bold-hover" ng-click="self.excluirTarefa(task)">Excluir</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-12 text-center border border-secondary" ng-show="self.todos.length == 0">
+      Sem tarefas no momento!
+    </div>
+
+  </div>
+
+  <!-- Modal start -->
+  <div class="modal fade" id="modalNovaTarefa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Nova tarefa</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form name="novaTarefa">
+            <div class="form-group">
+              <label for="responsavel">Responsável</label>
+              <input type="text" class="form-control" id="responsavel" placeholder="Quem vai fazer?" ng-model="self.task.responsavel"
+                required />
+            </div>
+            <div class="form-group">
+              <label for="tarefaNome">Nome tarefa</label>
+              <input type="text" class="form-control" id="tarefaNome" placeholder="Ex.: Criar logo do app" ng-model="self.task.nome"
+                required />
+            </div>
+            <div class="form-group">
+              <label for="tarefaDescricao">Descrição tarefa</label>
+              <input type="text" class="form-control" id="tarefaDescricao" placeholder="Seja breve ;)" ng-model="self.task.descricao"
+                required />
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="tarefaPrioritaria" ng-model="self.task.prioritaria">
+              <label class="form-check-label text-bold-hover" for="tarefaPrioritaria">Prioritária</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button ng-disabled="novaTarefa.$invalid" title="{{novaTarefa.$invalid ? 'Preencha todos os campos!' : ''}}" ng-class="{'cursorBlock': novaTarefa.$invalid}" type="button" class="btn btn-primary"
+            ng-click="self.addTodo(self.task)">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal end -->
+</body>
+
+</html>

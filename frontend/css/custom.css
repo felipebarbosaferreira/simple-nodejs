@@ -1,0 +1,19 @@
+.text-bold-hover:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+.cursorBlock {
+    cursor: not-allowed;
+}
+input:invalid {
+    background-color: #ffdddd;
+}
+.bg-verde {
+    background-color: #55f379;
+}
+.bg-amarelo {
+    background-color: #fcd766;
+}
+.bg-prata {
+    background-color: #ececec;
+}
